@@ -39,7 +39,7 @@ gas, renewables, nuclear, etc.)\
 ### Some of the important variables include:
 
 | **Variable Name** | **Description** |
-|----|----|
+|------------------------------------|------------------------------------|
 | `country` | Name of the country or region |
 | `iso_code` | Three-letter ISO country code |
 | `year` | Year of the observation |

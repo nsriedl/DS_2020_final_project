@@ -1,1 +1,172 @@
-Readme
+---
+title: "worldwide energy usage"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: 72
+---
+
+## Research Topic (Title):
+
+The Relationship Between Population Growth, Energy Demand, and Renewable
+Transition in Developing Nations
+
+## Team members:
+
+Prudvik Seemakurthi, Nate Riedl
+
+### Data:
+
+**Source:** The dataset comes from Our World in Data (OWID) — a research
+
+and publication platform based at the University of Oxford and the
+Oxford Martin School. Link: <https://ourworldindata.org/energy>
+
+**Description:** - This dataset provides a global, long-term view of
+energy
+
+production, consumption, and emissions for over 200 countries and
+territories, spanning from the 1960s to 2023.\
+- It integrates multiple aspects of the global energy system,
+covering: - Total and per-capita energy consumption (in terawatt-hours,
+TWh)\
+- Energy production and electricity generation by source (coal, oil,
+gas, renewables, nuclear, etc.)\
+- Carbon dioxide (CO₂) emissions and carbon intensity of electricity\
+- Fossil fuel and renewable shares in energy consumption\
+- Economic and demographic indicators (GDP and population)
+
+### Some of the important variables include:
+
+| **Variable Name** | **Description** |
+|------------------------------------|------------------------------------|
+| `country` | Name of the country or region |
+| `iso_code` | Three-letter ISO country code |
+| `year` | Year of the observation |
+| `population` | Total population of the country (from UN data) |
+| `gdp` | Gross Domestic Product (constant international dollars, PPP-adjusted) |
+| `primary_energy_consumption` | Total primary energy used (TWh) |
+| `energy_per_capita` | Energy use per person (TWh or MWh per capita) |
+| `fossil_fuel_consumption` | Total fossil fuel energy use (TWh) |
+| `fossil_share_energy` | Share (%) of fossil fuels in total energy use |
+| `renewables_consumption` | Renewable energy use (TWh) |
+| `renewables_share_energy` | Share (%) of renewables in total energy use |
+| `electricity_generation` | Total electricity generation (TWh) |
+| `carbon_intensity_elec` | CO₂ emitted per unit of electricity generated (gCO₂/kWh) |
+| `energy_per_gdp` | Energy use per unit of GDP (TWh per \$GDP) |
+
+### Questions to Be Addressed (Fleshed Out Project Idea):
+
+# Goal:
+
+To analyze how population size and economic development influence energy
+demand, emissions, and the transition to renewables. with a focus on
+identifying developing nations achieving renewable growth despite low
+GDP.
+
+# Research Questions:
+
+1.  Population & Energy: How does population size affect total energy
+    demand and reliance on fossil fuels across countries?
+
+2.  Population Growth & Fossil Dependence: Are countries with rapid
+    population growth relying more on fossil fuels?
+
+3.  Clean Energy & Economic Development: How does access to renewable
+    (clean) energy correlate with GDP and energy per capita?
+
+4.  Renewable Growth in Developing Nations: Which developing nations
+    show the strongest renewable expansion despite low GDP?
+
+5.  Energy Consumption & Time: How has the amount of fossil fuel vs
+    renewable consumed changed over time?
+
+6.  Electricity Generation: Which countries have had the highest
+    electricity generation over the years and how does this compare to
+    their fossil fuel and renewable energy consumption?
+
+# Expected Outcomes:
+
+Identify patterns showing whether high population correlates with higher
+emissions or energy demand. Evaluate if developing nations are catching
+up in renewable energy use. Visualize global disparities in renewable
+adoption and fossil fuel dependence. Highlight countries that have made
+significant clean energy progress despite economic challenges.
+
+```{r}
+library(tidyverse)
+
+df <- read_csv("owid-energy-data.csv")
+-
+dim(df)
+
+#colnames(df)
+#unique(df$country)
+head(df)
+
+
+```
+
+# Basic cleaning:
+
+1.  keeping relevant columns
+
+```{r}
+
+
+energy_clean <- df %>%
+  select(country, iso_code, year, population, gdp,
+         fossil_fuel_consumption, renewables_consumption,
+         fossil_share_energy, renewables_share_energy,
+         energy_per_capita, energy_cons_change_twh, energy_cons_change_pct)
+
+```
+
+2.  This step filters the dataset to keep data from 1990 onwards,
+    removes regions like continents and the world totals.
+
+```{r}
+energy_clean <- energy_clean %>%
+  filter(year >= 1990) %>%
+  filter(!country %in% c("World", "Asia", "Europe", "Africa",
+                         "North America", "South America", 
+                         "Oceania", "European Union (27)")) %>%
+  filter(!is.na(population))
+
+```
+
+3.This step groups the data by country and arranges it by year, then
+calculates each country’s total energy demand, yearly population growth
+rate, and the ratio of renewable to fossil fuel consumption.
+
+```{r}
+energy_clean <- energy_clean %>%
+  group_by(country) %>%
+  arrange(year) %>%
+  mutate(
+    total_energy_demand = fossil_fuel_consumption + renewables_consumption,
+    pop_growth_rate = (population - lag(population)) / lag(population) * 100,
+    renew_fossil_ratio = renewables_consumption / fossil_fuel_consumption,
+  )%>% ungroup()
+length(unique(energy_clean$country))
+```
+
+4.  This step filters out rows where the total energy demand is missing
+    or equal to zero, keeping only valid and meaningful energy data for
+    analysis.
+
+```{r}
+energy_clean <- energy_clean %>%
+  filter(!(is.na(total_energy_demand) | total_energy_demand == 0))
+```
+
+# Summary:
+
+```{r}
+summary(energy_clean %>%
+          select(population, total_energy_demand,
+                 fossil_share_energy, renewables_share_energy,
+                 energy_per_capita, gdp))
+
+```
+
