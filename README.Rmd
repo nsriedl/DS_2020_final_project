@@ -1,6 +1,6 @@
 ---
 title: "worldwide energy usage"
-output: html_document
+output: github_document
 editor_options: 
   markdown: 
     wrap: 72
