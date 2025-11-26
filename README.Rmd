@@ -169,3 +169,89 @@ summary(energy_clean %>%
                  energy_per_capita, gdp))
 
 ```
+
+
+1. Global Average Across all years:
+
+```{r}
+energy_clean %>%
+  summarise(
+    avg_population = mean(population, na.rm = TRUE),
+    avg_energy_demand = mean(total_energy_demand, na.rm = TRUE),
+    avg_fossil_share = mean(fossil_share_energy, na.rm = TRUE),
+    avg_renew_share = mean(renewables_share_energy, na.rm = TRUE),
+    avg_energy_per_capita = mean(energy_per_capita, na.rm = TRUE)
+  )
+
+```
+
+2. Average of Key Variables for Each Year
+```{r}
+yearly_summary <- energy_clean %>%
+  group_by(year) %>%
+  summarise(
+    avg_population = mean(population, na.rm = TRUE),
+    avg_energy_demand = mean(total_energy_demand, na.rm = TRUE),
+    avg_fossil_share = mean(fossil_share_energy, na.rm = TRUE),
+    avg_renew_share = mean(renewables_share_energy, na.rm = TRUE),
+    avg_energy_per_capita = mean(energy_per_capita, na.rm = TRUE)
+  )
+
+yearly_summary %>%
+  pivot_longer(cols = starts_with("avg_"),
+               names_to = "variable",
+               values_to = "value") %>%
+  ggplot(aes(x = year, y = value, color = variable)) +
+  geom_line(size = 1) +
+  facet_wrap(~ variable, scales = "free_y", ncol = 2) +
+  labs(
+    title = "Average Global Energy Indicators by Year",
+    x = "Year",
+    y = "Average Value"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "none")
+
+```
+
+3. Most Recent Year Summary: 
+```{r}
+latest_year <- max(energy_clean$year, na.rm = TRUE)
+
+energy_clean %>%
+  filter(year == latest_year) %>%
+  summarise(
+    num_countries = n_distinct(country),
+    total_global_energy = sum(total_energy_demand, na.rm = TRUE),
+    avg_fossil_share = mean(fossil_share_energy, na.rm = TRUE),
+    avg_renew_share = mean(renewables_share_energy, na.rm = TRUE),
+    avg_energy_per_capita = mean(energy_per_capita, na.rm = TRUE)
+  )
+
+
+energy_clean %>%
+  filter(year == latest_year) %>%
+  arrange(desc(total_energy_demand)) %>%
+  select(country, population, total_energy_demand, fossil_share_energy) %>%
+  head(10)
+
+
+```
+
+4. Correlation
+
+```{r}
+energy_clean %>%
+  filter(year == latest_year) %>%
+  summarise(
+    corr_pop_energy = cor(population, total_energy_demand, use = "complete.obs"),
+    corr_pop_fossil = cor(population, fossil_share_energy, use = "complete.obs")
+  )
+
+```
+```{r}
+write_csv(energy_clean, "energy_clean.csv")
+```
+
+
+
