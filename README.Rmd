@@ -118,8 +118,8 @@ energy_clean <- df %>%
   select(country, iso_code, year, population, gdp,
          fossil_fuel_consumption, renewables_consumption,
          fossil_share_energy, renewables_share_energy,
-         energy_per_capita, energy_cons_change_twh, energy_cons_change_pct)
-
+         energy_per_capita, energy_cons_change_twh, energy_cons_change_pct, 
+         electricity_generation)
 ```
 
 2.  This step filters the dataset to keep data from 1990 onwards,
@@ -170,8 +170,7 @@ summary(energy_clean %>%
 
 ```
 
-
-1. Global Average Across all years:
+1.  Global Average Across all years:
 
 ```{r}
 energy_clean %>%
@@ -185,7 +184,8 @@ energy_clean %>%
 
 ```
 
-2. Average of Key Variables for Each Year
+2.  Average of Key Variables for Each Year
+
 ```{r}
 yearly_summary <- energy_clean %>%
   group_by(year) %>%
@@ -214,7 +214,8 @@ yearly_summary %>%
 
 ```
 
-3. Most Recent Year Summary: 
+3.  Most Recent Year Summary:
+
 ```{r}
 latest_year <- max(energy_clean$year, na.rm = TRUE)
 
@@ -238,7 +239,7 @@ energy_clean %>%
 
 ```
 
-4. Correlation
+4.  Correlation
 
 ```{r}
 energy_clean %>%
@@ -249,13 +250,12 @@ energy_clean %>%
   )
 
 ```
+
 ```{r}
 write_csv(energy_clean, "energy_clean.csv")
 ```
 
-
 # Population & Energy: How does population size affect total energy demand across countries?
-
 
 ```{r}
 pop_energy <- energy_clean %>%
@@ -269,8 +269,8 @@ cor(pop_energy$population, pop_energy$total_energy_demand, use = "complete.obs")
 
 there is a strong correlation between population and energy demand.
 
-
 ## Population and Total Energy Demand
+
 ```{r}
 pop_energy %>%
   ggplot(aes(x = population, y = total_energy_demand)) +
@@ -286,9 +286,15 @@ pop_energy %>%
   theme_minimal()
 
 ```
-The graph shows that countries with bigger populations use more energy. As population increases, total energy demand also rises. The red line shows this clear upward trend. This means that when a country’s population grows, its need for energy also grows, showing that population strongly affects energy use.
+
+The graph shows that countries with bigger populations use more energy.
+As population increases, total energy demand also rises. The red line
+shows this clear upward trend. This means that when a country’s
+population grows, its need for energy also grows, showing that
+population strongly affects energy use.
 
 ## Population and Total Energy Demand
+
 ```{r}
 energy_clean %>%
   group_by(year) %>%
@@ -305,8 +311,13 @@ energy_clean %>%
   theme_minimal()
 
 ```
-From 1990 to 2025, the correlation steadily increases from about 0.6 to above 0.75. This means that population size and energy demand are becoming more closely connected, showing that growing populations drive higher energy use worldwide.
-## Total Energy Demand and Population Growth Over Time
+
+From 1990 to 2025, the correlation steadily increases from about 0.6 to
+above 0.75. This means that population size and energy demand are
+becoming more closely connected, showing that growing populations drive
+higher energy use worldwide. \## Total Energy Demand and Population
+Growth Over Time
+
 ```{r}
 countries_to_plot <- c("China", "India", "United States", "Germany", "Japan", "Russia", "Brazil")
 library(patchwork)
@@ -340,8 +351,11 @@ p1 + p2
 
 
 ```
-China and India show steep rises in both population and energy demand, while the United States and developed nations stay stable. This shows that fast-growing countries are driving much of the increase in global energy use.
 
+China and India show steep rises in both population and energy demand,
+while the United States and developed nations stay stable. This shows
+that fast-growing countries are driving much of the increase in global
+energy use.
 
 ## Population and Energy Use Per Capita
 
@@ -360,11 +374,13 @@ energy_clean %>%
 
 ```
 
-Countries with smaller populations tend to use more energy per person, while highly populated countries use less per person. The downward slope of the red line suggests that larger populations often have lower energy use per capita.
+Countries with smaller populations tend to use more energy per person,
+while highly populated countries use less per person. The downward slope
+of the red line suggests that larger populations often have lower energy
+use per capita.
 
-
-
-#Are countries with rapid population growth relying more on fossil fuels?
+#Are countries with rapid population growth relying more on fossil
+fuels?
 
 ## Population Growth and Fossil Fuel Dependence:
 
@@ -393,14 +409,17 @@ ggplot(pop_fossil, aes(x = avg_pop_growth, y = avg_fossil_share)) +
 
 
 ```
-This graph shows a positive relationship between population growth and fossil fuel use. Countries with faster-growing populations tend to rely more on fossil fuels for energy. The upward red line indicates that as population growth increases, the share of fossil fuels in total energy consumption also rises.
+
+This graph shows a positive relationship between population growth and
+fossil fuel use. Countries with faster-growing populations tend to rely
+more on fossil fuels for energy. The upward red line indicates that as
+population growth increases, the share of fossil fuels in total energy
+consumption also rises.
 
 ```{r}
 cor(pop_fossil$avg_pop_growth, pop_fossil$avg_fossil_share, use = "complete.obs")
 
 ```
-
-
 
 ## Fossil Fuel Share of Energy Over Time
 
@@ -419,7 +438,11 @@ energy_clean %>%
 
 ```
 
-This graph shows changes in fossil fuel use for China, India, and the United States from 1990 to 2025. China and the U.S. have both reduced their fossil fuel share over time, while India’s share has stayed mostly stable. This suggests slower energy transition in fast-growing countries like India.
+This graph shows changes in fossil fuel use for China, India, and the
+United States from 1990 to 2025. China and the U.S. have both reduced
+their fossil fuel share over time, while India’s share has stayed mostly
+stable. This suggests slower energy transition in fast-growing countries
+like India.
 
 ## Fossil Fuel Share by Population Growth Category
 
@@ -450,8 +473,11 @@ energy_clean %>%
 
 ```
 
-This boxplot compares fossil fuel dependence across countries with different population growth rates. High-growth nations show the highest fossil fuel share, often close to 100%, while low-growth countries rely less on fossil fuels. This suggests that rapidly growing populations depend more on nonrenewable energy to meet increasing demand.
-
+This boxplot compares fossil fuel dependence across countries with
+different population growth rates. High-growth nations show the highest
+fossil fuel share, often close to 100%, while low-growth countries rely
+less on fossil fuels. This suggests that rapidly growing populations
+depend more on nonrenewable energy to meet increasing demand.
 
 ## Yearly Correlation Between Population Growth and Fossil Fuel Use
 
@@ -473,9 +499,14 @@ ggplot(cor_yearly, aes(x = year, y = correlation)) +
 
 ```
 
-This graph shows how the link between population growth and fossil fuel use has changed from 1990 to 2025. The correlation remains mostly positive but weak, meaning countries with faster population growth tend to rely slightly more on fossil fuels. The relationship also fluctuates over time, showing shifting energy trends.
+This graph shows how the link between population growth and fossil fuel
+use has changed from 1990 to 2025. The correlation remains mostly
+positive but weak, meaning countries with faster population growth tend
+to rely slightly more on fossil fuels. The relationship also fluctuates
+over time, showing shifting energy trends.
 
 ## Fossil Fuel Energy Share by Region
+
 ```{r}
 region_data <- energy_clean %>%
   filter(year >= 2000) %>%
@@ -501,8 +532,11 @@ region_data %>%
   theme_minimal()
 ```
 
-This graph compares fossil fuel dependence across regions from 2000 to 2025. Africa and Asia have the highest fossil fuel shares, showing continued reliance on nonrenewable energy. In contrast, Europe and North America show steady declines, indicating greater progress toward renewable energy adoption and cleaner energy transitions.
-
+This graph compares fossil fuel dependence across regions from 2000 to
+2025. Africa and Asia have the highest fossil fuel shares, showing
+continued reliance on nonrenewable energy. In contrast, Europe and North
+America show steady declines, indicating greater progress toward
+renewable energy adoption and cleaner energy transitions.
 
 ### How does access to renewable (clean) energy correlate with GDP and energy per capita?
 
@@ -515,7 +549,9 @@ energy_clean <- energy_clean %>%
   )
 
 ```
+
 ## GDP per Capita and Renewable Energy Share
+
 ```{r}
 library(ggplot2)
 
@@ -532,8 +568,11 @@ ggplot(energy_clean, aes(x = gdp_per_capita, y = renewables_share_energy)) +
 
 ```
 
-This graph shows a slight positive relationship between GDP per capita and renewable energy share. Wealthier countries generally have higher renewable energy use, though the trend is weak. This suggests that while economic growth supports cleaner energy adoption, other factors like policy and technology also play key roles.
-
+This graph shows a slight positive relationship between GDP per capita
+and renewable energy share. Wealthier countries generally have higher
+renewable energy use, though the trend is weak. This suggests that while
+economic growth supports cleaner energy adoption, other factors like
+policy and technology also play key roles.
 
 ## Average Renewable Energy Share by Income Group
 
@@ -560,11 +599,14 @@ energy_clean %>%
   theme(legend.position = "none")
 
 ```
-This bar chart shows that high-income countries have the highest average renewable energy share, followed by middle- and low-income nations. The pattern suggests that wealthier countries are better equipped to invest in renewable energy technologies, while lower-income countries still depend more on traditional fossil fuel sources.
 
+This bar chart shows that high-income countries have the highest average
+renewable energy share, followed by middle- and low-income nations. The
+pattern suggests that wealthier countries are better equipped to invest
+in renewable energy technologies, while lower-income countries still
+depend more on traditional fossil fuel sources.
 
 ## Yearly Correlation Between GDP per Capita and Renewable Energy Share
-
 
 ```{r}
 cor_yearly <- energy_clean %>%
@@ -587,4 +629,140 @@ ggplot(cor_yearly, aes(x = year, y = correlation)) +
   theme_minimal()
 
 ```
-This graph tracks how the connection between economic growth and renewable energy adoption has changed over time. The correlation remains weak but generally positive, showing that as countries become wealthier, they slightly increase their renewable energy use. However, the fluctuations suggest varying national priorities and energy policies.
+
+This graph tracks how the connection between economic growth and
+renewable energy adoption has changed over time. The correlation remains
+weak but generally positive, showing that as countries become wealthier,
+they slightly increase their renewable energy use. However, the
+fluctuations suggest varying national priorities and energy policies.
+
+# Energy Consumption & Time
+
+## How has the amount of fossil fuel vs renewable consumed changed over time for all countries?
+
+```{r}
+energy_clean |> 
+  group_by(year) |> 
+  ggplot(aes(x = year, y = fossil_fuel_consumption)) +
+  geom_col()
+```
+```{r}
+energy_clean |> 
+  group_by(year) |> 
+  ggplot(aes(x = year, y = renewables_consumption)) +
+  geom_col()
+```
+According to these graphs, it appears that the total fossil fuel consumption for all of the countries in this data set has increased at a relatively steady rate over the past 3 decades. In terms of renewable energy, consumption has been on the rise since around 2004 with 2024 having an especially large increase. 
+
+## Fossil fuel vs renewable energy consumption compared between continents
+
+```{r}
+cont <- read_csv('country_data.csv')
+colnames(cont)[1] <- 'country'
+colnames(cont)[2] <- 'continent'
+
+energy_clean |> select(country) |> anti_join(cont |> select(country, continent), by = 'country') |> View()
+
+cont$country[62] <- 'Czechia'
+cont$country[108] <- 'Iran'
+cont$country[133] <- 'North Macedonia'
+cont$country[186] <- 'Russia'
+cont$country[166] <- 'North Korea'
+cont$country[211] <- 'South Korea'
+cont$country[239] <- 'United Kingdom'
+cont$country[240] <- 'United States'
+cont$country[244] <- 'Venezuela'
+cont$country[245] <- 'Vietnam'
+
+energy_continents <- energy_clean |> left_join(cont |> select(country, continent), by = 'country')
+
+
+energy_continents |> 
+  group_by(year, continent) |> 
+  filter(!is.na(continent)) |> 
+  ggplot(aes(x = year, y = fossil_fuel_consumption)) +
+  geom_col() +
+  facet_wrap(~continent, scales = 'free_y') +
+  ggtitle('Total Fossil Fuel Consumption')
+```
+```{r}
+energy_continents |> 
+  group_by(year, continent) |> 
+  filter(!is.na(continent)) |> 
+  ggplot(aes(x = year, y = renewables_consumption)) +
+  geom_col() +
+  facet_wrap(~continent, scales = 'free_y') +
+  ggtitle('Total Renewable Energy Consumption')
+```
+
+Based off of these graphs, Asia appears to have experienced the greatest increase in fossil fuel consumption out of all of the continents, and the most recent data shows that Asia now consumes the highest amount of fossil fuel compared to the rest of the continents. The graphs also show that the Americas, Oceania, and Africa experienced an increase in fossil fuel consumption, however for Oceania and the Americas the amount of fossil fuels consumed leveled off around 2005 with decreases observed starting around 2015. 
+
+For renewable energy, all of the continents experienced a noticeable increase in consumption starting around 2005. Out of all of the countries, Africa and Oceania appear to have the lowest levels of yearly renewable energy consumption while Asia appears to have the highest according to the most recent data. 
+
+# Electricity Generation
+
+## Which countries have had the highest electricity generation over the years?
+
+```{r}
+top_electric <- energy_continents |> 
+  select(country, electricity_generation, continent) |> 
+  filter(!is.na(continent)) |> 
+  group_by(country) |> 
+  summarise(total_e = sum(electricity_generation, na.rm = T)) |> 
+  arrange(desc(total_e))
+
+top_10_electric <- top_electric[1:10, ]
+
+energy_clean |> 
+  filter(country %in% top_10_electric$country) |> 
+  ggplot(aes(x = year, y = electricity_generation, color = country)) +
+  geom_line() +
+  ggtitle('Top Electricity-Generating Countries')
+```
+Looking at the top producers of electricity in the past decade, it appears that China by far produces the greatest amount of electricity out of all the countries in the data set. The United States initially produced the greatest amount of electricity from 1990 to around 2008, where it was surpassed by China. Most of these countries appear to produce a relatively consistent amount of electricity each year, however both China and India have had noticeable increases over the past few decades. 
+
+## How does electricity generation compare to fossil fuel and renewable energy consumption?
+
+```{r}
+top_10_electric |> 
+  ggplot(aes(x = reorder(country, desc(total_e)), y = total_e)) +
+  geom_col() +
+  ylab('Total Electricity Produced') +
+  ggtitle('Top 10 Electricity-Producing Countries') +
+  xlab('country')
+```
+```{r}
+top_fossil <- energy_continents |> 
+  select(country, fossil_fuel_consumption, continent) |> 
+  filter(!is.na(continent)) |> 
+  group_by(country) |> 
+  summarise(total_fossil = sum(fossil_fuel_consumption)) |> 
+  arrange(desc(total_fossil))
+
+top_10_fossil <- top_fossil[1:10, ]
+
+top_10_fossil |> 
+  ggplot(aes(x = reorder(country, desc(total_fossil)), y = total_fossil)) +
+  geom_col() +
+  ylab('Total Fossil Fuel Consumed') +
+  ggtitle('Top 10 Fossil Fuel Consuming Countries') +
+  xlab('country')
+```
+```{r}
+top_renewable <- energy_continents |> 
+  select(country, renewables_consumption, continent) |> 
+  filter(!is.na(continent)) |> 
+  group_by(country) |> 
+  summarise(total_renewable = sum(renewables_consumption)) |> 
+  arrange(desc(total_renewable))
+
+top_10_renewable <- top_renewable[1:10, ]
+
+top_10_renewable |> 
+  ggplot(aes(x = reorder(country, desc(total_renewable)), y = total_renewable)) +
+  geom_col() +
+  ylab('Total Renewable Energy Consumed') +
+  ggtitle('Top 10 Renewable Energy Consuming Countries') +
+  xlab('country')
+```
+Looking at these graphs, most of the top countries are similar for each of the different types of energy used. For all the types, China and the United States are both the top 2 countries by a considerable amount, with the remaining countries having variable positions across the different energy types.
