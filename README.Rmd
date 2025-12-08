@@ -73,15 +73,12 @@ GDP.
     population growth relying more on fossil fuels?
 
 3.  Clean Energy & Economic Development: How does access to renewable
-    (clean) energy correlate with GDP and energy per capita?
+    (clean) energy correlate with GDP and energy per capital?
 
-4.  Renewable Growth in Developing Nations: Which developing nations
-    show the strongest renewable expansion despite low GDP?
-
-5.  Energy Consumption & Time: How has the amount of fossil fuel vs
+4. Energy Consumption & Time: How has the amount of fossil fuel vs
     renewable consumed changed over time?
 
-6.  Electricity Generation: Which countries have had the highest
+5.  Electricity Generation: Which countries have had the highest
     electricity generation over the years and how does this compare to
     their fossil fuel and renewable energy consumption?
 
@@ -112,8 +109,6 @@ head(df)
 1.  keeping relevant columns
 
 ```{r}
-
-
 energy_clean <- df %>%
   select(country, iso_code, year, population, gdp,
          fossil_fuel_consumption, renewables_consumption,
@@ -379,8 +374,7 @@ while highly populated countries use less per person. The downward slope
 of the red line suggests that larger populations often have lower energy
 use per capita.
 
-#Are countries with rapid population growth relying more on fossil
-fuels?
+#Are countries with rapid population growth relying more on fossil fuels?
 
 ## Population Growth and Fossil Fuel Dependence:
 
@@ -424,7 +418,7 @@ cor(pop_fossil$avg_pop_growth, pop_fossil$avg_fossil_share, use = "complete.obs"
 ## Fossil Fuel Share of Energy Over Time
 
 ```{r}
-countries_to_plot2 <- c("India", "Nigeria", "China", "United States")
+countries_to_plot2 <- c("India", "China", "United States")
 
 energy_clean %>%
   filter(country %in% countries_to_plot2) %>%
@@ -508,6 +502,7 @@ over time, showing shifting energy trends.
 ## Fossil Fuel Energy Share by Region
 
 ```{r}
+library(tidyverse)
 region_data <- energy_clean %>%
   filter(year >= 2000) %>%
   mutate(region = case_when(
