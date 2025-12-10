@@ -761,3 +761,16 @@ top_10_renewable |>
   xlab('country')
 ```
 Looking at these graphs, most of the top countries are similar for each of the different types of energy used. For all the types, China and the United States are both the top 2 countries by a considerable amount, with the remaining countries having variable positions across the different energy types.
+
+
+#Findings & Conclusion
+* Countries with larger populations consume more total energy.
+* Energy demand increases almost proportionally with population growth.
+* Rapidly growing nations still rely heavily on fossil fuels.
+* Developed countries are gradually shifting toward renewables.
+* High-income countries show higher renewable energy shares overall.
+* Fossil fuel use has risen steadily over the last three decades.
+* Renewable energy consumption has surged since around 2004, especially after 2020.
+* Asia leads in both fossil fuel and renewable energy use.
+* China and the United States dominate global electricity generation.
+* Global energy systems remain fossil-fuel dependent, but renewables are growing fast.
