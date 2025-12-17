@@ -68,15 +68,12 @@ GDP.
     population growth relying more on fossil fuels?
 
 3.  Clean Energy & Economic Development: How does access to renewable
-    (clean) energy correlate with GDP and energy per capita?
+    (clean) energy correlate with GDP and energy per capital?
 
-4.  Renewable Growth in Developing Nations: Which developing nations
-    show the strongest renewable expansion despite low GDP?
-
-5.  Energy Consumption & Time: How has the amount of fossil fuel vs
+4.  Energy Consumption & Time: How has the amount of fossil fuel vs
     renewable consumed changed over time?
 
-6.  Electricity Generation: Which countries have had the highest
+5.  Electricity Generation: Which countries have had the highest
     electricity generation over the years and how does this compare to
     their fossil fuel and renewable energy consumption?
 
@@ -92,12 +89,10 @@ significant clean energy progress despite economic challenges.
 library(tidyverse)
 ```
 
-    ## Warning: package 'ggplot2' was built under R version 4.5.2
-
     ## ── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
     ## ✔ dplyr     1.1.4     ✔ readr     2.1.5
-    ## ✔ forcats   1.0.0     ✔ stringr   1.5.1
-    ## ✔ ggplot2   4.0.0     ✔ tibble    3.3.0
+    ## ✔ forcats   1.0.1     ✔ stringr   1.5.1
+    ## ✔ ggplot2   3.5.2     ✔ tibble    3.3.0
     ## ✔ lubridate 1.9.4     ✔ tidyr     1.3.1
     ## ✔ purrr     1.1.0     
     ## ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
@@ -417,11 +412,7 @@ Growth Over Time
 ``` r
 countries_to_plot <- c("China", "India", "United States", "Germany", "Japan", "Russia", "Brazil")
 library(patchwork)
-```
 
-    ## Warning: package 'patchwork' was built under R version 4.5.2
-
-``` r
 # Filter data
 data_subset <- energy_clean %>%
   filter(country %in% countries_to_plot)
@@ -530,7 +521,7 @@ cor(pop_fossil$avg_pop_growth, pop_fossil$avg_fossil_share, use = "complete.obs"
 ## Fossil Fuel Share of Energy Over Time
 
 ``` r
-countries_to_plot2 <- c("India", "Nigeria", "China", "United States")
+countries_to_plot2 <- c("India", "China", "United States")
 
 energy_clean %>%
   filter(country %in% countries_to_plot2) %>%
@@ -617,6 +608,7 @@ over time, showing shifting energy trends.
 ## Fossil Fuel Energy Share by Region
 
 ``` r
+library(tidyverse)
 region_data <- energy_clean %>%
   filter(year >= 2000) %>%
   mutate(region = case_when(
@@ -806,8 +798,25 @@ cont <- read_csv('country_data.csv')
 colnames(cont)[1] <- 'country'
 colnames(cont)[2] <- 'continent'
 
-energy_clean |> select(country) |> anti_join(cont |> select(country, continent), by = 'country') |> View()
+energy_clean |> select(country) |> anti_join(cont |> select(country, continent), by = 'country')
+```
 
+    ## # A tibble: 420 × 1
+    ##    country                      
+    ##    <chr>                        
+    ##  1 Czechia                      
+    ##  2 High-income countries        
+    ##  3 Iran                         
+    ##  4 Lower-middle-income countries
+    ##  5 North Macedonia              
+    ##  6 Russia                       
+    ##  7 South Korea                  
+    ##  8 United Kingdom               
+    ##  9 United States                
+    ## 10 Upper-middle-income countries
+    ## # ℹ 410 more rows
+
+``` r
 cont$country[62] <- 'Czechia'
 cont$country[108] <- 'Iran'
 cont$country[133] <- 'North Macedonia'
@@ -941,9 +950,22 @@ top_10_renewable |>
   xlab('country')
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-34-1.png)<!-- --> Looking at
-these graphs, most of the top countries are similar for each of the
-different types of energy used. For all the types, China and the United
-States are both the top 2 countries by a considerable amount, with the
-remaining countries having variable positions across the different
-energy types.
+![](README_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+
+Looking at these graphs, most of the top countries are similar for each
+of the different types of energy used. For all the types, China and the
+United States are both the top 2 countries by a considerable amount,
+with the remaining countries having variable positions across the
+different energy types.
+
+\#Findings & Conclusion \* Countries with larger populations consume
+more total energy. \* Energy demand increases almost proportionally with
+population growth. \* Rapidly growing nations still rely heavily on
+fossil fuels. \* Developed countries are gradually shifting toward
+renewables. \* High-income countries show higher renewable energy shares
+overall. \* Fossil fuel use has risen steadily over the last three
+decades. \* Renewable energy consumption has surged since around 2004,
+especially after 2020. \* Asia leads in both fossil fuel and renewable
+energy use. \* China and the United States dominate global electricity
+generation. \* Global energy systems remain fossil-fuel dependent, but
+renewables are growing fast.

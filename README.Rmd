@@ -641,6 +641,7 @@ energy_clean |>
   ggplot(aes(x = year, y = fossil_fuel_consumption)) +
   geom_col()
 ```
+
 ```{r}
 energy_clean |> 
   group_by(year) |> 
@@ -656,7 +657,7 @@ cont <- read_csv('country_data.csv')
 colnames(cont)[1] <- 'country'
 colnames(cont)[2] <- 'continent'
 
-energy_clean |> select(country) |> anti_join(cont |> select(country, continent), by = 'country') |> View()
+energy_clean |> select(country) |> anti_join(cont |> select(country, continent), by = 'country')
 
 cont$country[62] <- 'Czechia'
 cont$country[108] <- 'Iran'
@@ -726,6 +727,8 @@ top_10_electric |>
   ggtitle('Top 10 Electricity-Producing Countries') +
   xlab('country')
 ```
+
+
 ```{r}
 top_fossil <- energy_continents |> 
   select(country, fossil_fuel_consumption, continent) |> 
@@ -743,6 +746,8 @@ top_10_fossil |>
   ggtitle('Top 10 Fossil Fuel Consuming Countries') +
   xlab('country')
 ```
+
+
 ```{r}
 top_renewable <- energy_continents |> 
   select(country, renewables_consumption, continent) |> 
@@ -760,6 +765,8 @@ top_10_renewable |>
   ggtitle('Top 10 Renewable Energy Consuming Countries') +
   xlab('country')
 ```
+
+
 Looking at these graphs, most of the top countries are similar for each of the different types of energy used. For all the types, China and the United States are both the top 2 countries by a considerable amount, with the remaining countries having variable positions across the different energy types.
 
 
@@ -774,3 +781,4 @@ Looking at these graphs, most of the top countries are similar for each of the d
 * Asia leads in both fossil fuel and renewable energy use.
 * China and the United States dominate global electricity generation.
 * Global energy systems remain fossil-fuel dependent, but renewables are growing fast.
+
